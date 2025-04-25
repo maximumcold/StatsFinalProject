@@ -1,0 +1,19 @@
+ID Year,Year,ID Gender,Gender,ID Workforce Status,Workforce Status,ID Nation,Nation,ID Minor Occupation Group,Minor Occupation Group,Total Population,Total Population MOE Appx
+2022,"2022",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",7786231,66731.25708136248
+2022,"2022",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2772879,40508.43987466189
+2021,"2021",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",7415712,65193.01531788182
+2021,"2021",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2641193,39549.21010119291
+2020,"2020",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",7015271,63479.868651471865
+2020,"2020",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2498278,38479.311124300126
+2019,"2019",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",6710318,62143.8748216869
+2019,"2019",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2368781,37483.7532212722
+2018,"2018",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",6429259,60868.82209401842
+2018,"2018",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2249341,36537.37374321119
+2017,"2017",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",6122545,59445.97797417679
+2017,"2017",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2101686,35332.266426515205
+2016,"2016",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",5895558,58359.822482057985
+2016,"2016",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",2018274,34629.90110587544
+2015,"2015",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",5703154,57420.979686365965
+2015,"2015",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",1959621,34126.33317428836
+2014,"2014",1,"Male","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",5535789,56588.16920305448
+2014,"2014",2,"Female","true","true","01000US","United States","150000-190000","Computer, engineering, & science occupations",1903701,33638.87563979712
