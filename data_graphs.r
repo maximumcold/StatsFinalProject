@@ -153,3 +153,45 @@ ggplot(workforce_data, aes(x = year, y = total_population, color = year, group =
     ) +
     theme_minimal()
 ggsave("workforce_over_time.jpeg", width = 8, height = 6)
+
+# -------------------------------------------------------------------------------
+# Layoffs Over Time
+# -------------------------------------------------------------------------------
+
+layoffs_data <- read_csv("data/FilteredLayoffData.csv",
+  col_types = cols(
+    Company   = col_character(),
+    `Laid Off` = col_double(),
+    Date      = col_character()
+  )
+) %>%
+  mutate(
+    date    = mdy(Date),
+    layoffs = `Laid Off`
+  )
+
+monthly_totals <- layoffs_data %>%
+  mutate(month = floor_date(date, "month")) %>%
+  group_by(month) %>%
+  summarise(total_layoffs = sum(layoffs, na.rm = TRUE)) %>%
+  ungroup()
+
+ggplot(monthly_totals, aes(x = month, y = total_layoffs)) +
+  geom_line(color = "purple", linewidth = 1) +
+  geom_point(color = "purple", size = 2) +
+  scale_x_date(
+    date_breaks = "1 month",
+    date_labels = "%b %Y",
+    expand = expansion(add = c(0, 0))
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    x     = "Month",
+    y     = "Total Layoffs",
+    title = "Monthly Layoffs Trend"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+  ggsave("layoffs_over_time.jpeg", width = 8, height = 6)
