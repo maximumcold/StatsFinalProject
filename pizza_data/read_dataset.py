@@ -8,14 +8,14 @@ def read_dataset(path):
   return dataset
 
 if __name__ == '__main__':
-  path = './pizza_request_dataset.json'
+  path = 'pizza_data/pizza_request_dataset.json'
   dataset = read_dataset(path)
   
-  print 'The dataset contains %d samples.' %(len(dataset))
-  print 'Available attributes: ', sorted(dataset[0].keys())
-  print 'First post:'
-  print json.dumps(dataset[0], sort_keys=True, indent=2)
+  print ('The dataset contains %d samples.' %(len(dataset)))
+  print ('Available attributes: ', sorted(dataset[0].keys()))
+  print ('First post:')
+  print (json.dumps(dataset[0], sort_keys=True, indent=2))
 
   successes = [r['requester_received_pizza'] for r in dataset]
   success_rate = 100.0 * sum(successes) / float(len(successes))
-  print 'The average success rate is: %.2f%%' %(success_rate)
+  print ('The average success rate is: %.2f%%' %(success_rate))
