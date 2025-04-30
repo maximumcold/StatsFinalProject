@@ -17,6 +17,7 @@ pizza_data <- pizza_data %>%
   )
 
 
+
 pizza_data %>%
   mutate(request_date = as.Date(request_time)) %>%
   group_by(request_date) %>%
@@ -56,8 +57,28 @@ pizza_data %>%
       x     = "Hour (0–23)",
       y     = "Percent Received"
     ) +
+    
     theme_minimal()
-ggsave("pizza_requests_hour.jpeg", width = 8, height = 4)
+ggsave("pizza_requests_hour_cols.jpeg", width = 8, height = 4)
+
+pizza_data %>%
+  mutate(
+    hour_group = floor(hour(request_time) / 4) * 4,
+    hour_group = factor(hour_group, levels = seq(0, 20, 4), labels = c("0–3", "4–7", "8–11", "12–15", "16–19", "20–23"))
+  ) %>%
+  group_by(hour_group) %>%
+  summarise(success_rate = mean(received_pizza, na.rm = TRUE)) %>%
+  ggplot(aes(x = hour_group, y = success_rate, fill = hour_group)) +
+    geom_col() +
+    scale_y_continuous(labels = scales::percent_format()) +
+    scale_fill_brewer(palette = "Set2", name = "Hour Group") +
+    labs(
+      title = "Success Rate by 4-Hour Time Blocks",
+      x     = "Time of Day",
+      y     = "Percent Received"
+    ) +
+    theme_minimal()
+ggsave("pizza_requests_hour_hist.jpeg", width = 8, height = 4)
 
 pizza_data %>%
   mutate(weekday = wday(request_time, label = TRUE)) %>%
