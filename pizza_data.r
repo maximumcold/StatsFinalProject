@@ -2,6 +2,38 @@ library(dplyr)
 library(lubridate)
 library(ggplot2) 
 
+unfiltered_pizza_data <- read.csv("data/pizza_requests.csv")
+
+clean_data <- unfiltered_pizza_data %>%
+  mutate(
+    request_id                     = request_id,
+    request_time                   = as.POSIXct(unix_timestamp_of_request_utc,
+                                               origin = "1970-01-01", tz = "UTC"),
+    successes                      = ifelse(requester_received_pizza == "True", 1, 0),
+    failures                       = ifelse(requester_received_pizza == "True", 0, 1),
+    number_upvotes_at_retrieval    = as.numeric(number_of_upvotes_of_request_at_retrieval),
+    number_downvotes_at_retrieval  = as.numeric(number_of_downvotes_of_request_at_retrieval),
+    account_age_request            = as.numeric(requester_account_age_in_days_at_request),
+    account_age_retrieval          = as.numeric(requester_account_age_in_days_at_retrieval)
+  )
+
+num_requests_by_hour <- clean_data %>%
+  mutate(hour = hour(request_time)) %>%
+  group_by(hour) %>%
+  summarise(n_requests = n())
+  
+num_requests_by_hour %>%
+  ggplot(aes(x = hour, y = n_requests)) +
+    geom_col() +
+    scale_y_continuous(labels = scales::comma_format()) +
+    labs(
+      title = "Number of Requests by Hour of Day",
+      x     = "Hour (0–23)",
+      y     = "Number of Requests"
+    ) +
+    theme_minimal()
+ggsave("pizza_requests_hour.jpeg", width = 8, height = 4)
+
 pizza_data <- read.csv("data/pizza_requests.csv")
 
 pizza_data <- pizza_data %>%
