@@ -25,7 +25,7 @@ pizza_data %>%
     success_rate = mean(received_pizza)
   ) %>%
 
-  ggplot(aes(x = floor_date(request_date,"week"), y = success_rate, color = success_rate)) +
+  ggplot(aes(x = floor_date(request_date, "month"), y = success_rate, color = success_rate)) +
     # geom_line() +
     geom_point(aes(size = n_requests), alpha = 0.5) +
     scale_color_gradient(low = "#C23B23", high = "#976ED7") +
@@ -33,9 +33,9 @@ pizza_data %>%
     scale_size_continuous(name = "Number of Requests") +
     scale_y_continuous(labels = scales::percent_format())    +
     labs(
-      title = "Daily Success Rate of Pizza Requests",
-      x     = "Date",
-      y     = "Percent Received"
+      title = "Monthly Success Rate of Pizza Requests",
+      x     = "Month",
+      y     = "Percent Received"  
     ) +
     theme_minimal()
 ggsave("pizza_requests_success_rate.jpeg", width = 8, height = 4)
