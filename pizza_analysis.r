@@ -45,6 +45,7 @@ fdinnerpizza <- sum(clean_data$failures[hour > 16 & hour <= 20])
 feveningpizza <- sum(clean_data$failures[hour > 20])
 pizzafailures <- c(fearlypizza, fmorningpizza, fbreakfastpizza, fmiddaypizza, fdinnerpizza, feveningpizza)
 
+pizzatotals <- c()
 for (i in 1:length(pizzasuccesses)) {
   pizzatotals <- c(pizzatotals, pizzasuccesses[i] + pizzafailures[i])
 }
