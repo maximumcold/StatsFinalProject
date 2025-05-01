@@ -252,3 +252,15 @@ please_pizza_summary %>%
   theme(legend.position = "top")
 
 ggsave("pizza_requests_please_usage_mosaic.jpeg", width = 8, height = 4)
+
+pizza_data <- data.frame(
+  used_please = c("No", "No", "Yes", "Yes"),
+  outcome = c("No", "Yes", "No", "Yes"),
+  n = c(3885, 1285, 389, 112)
+)
+
+table_pizza <- xtabs(n ~ used_please + outcome, data = pizza_data)
+
+print(table_pizza)
+
+chisq.test(table_pizza)
