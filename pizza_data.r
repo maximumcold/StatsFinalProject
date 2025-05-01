@@ -202,43 +202,53 @@ ggplot(pizza_hour_summary, aes(x = hour)) +
 # Save the combined plot
 ggsave("pizza_requests_hour_combined.jpeg", width = 8, height = 4)
 
-
-please_pizza <- read.csv("data/please_pizza.csv")
-did_use_please_pizza <- please_pizza %>%
+did_use_please_pizza <- read.csv("data/please_pizza.csv") %>%
   mutate(
-    request_id                     = request_id,
-    request_time                   = as.POSIXct(unix_timestamp_of_request_utc,
-                                               origin = "1970-01-01", tz = "America/Chicago"),
-    received_pizza                 = ifelse(requester_received_pizza == "True", 1, 0),
-    number_upvotes_at_retrieval    = as.numeric(number_of_upvotes_of_request_at_retrieval),
-    number_downvotes_at_retrieval  = as.numeric(number_of_downvotes_of_request_at_retrieval),
-    account_age_request            = as.numeric(requester_account_age_in_days_at_request),
-    account_age_retrieval          = as.numeric(requester_account_age_in_days_at_retrieval)
-  )
-did_not_use_please_pizza <- read.csv("data/no_please_pizza.csv")%>%
-  mutate(
-    request_id                     = request_id,
-    request_time                   = as.POSIXct(unix_timestamp_of_request_utc,
-                                               origin = "1970-01-01", tz = "America/Chicago"),
-    received_pizza                 = ifelse(requester_received_pizza == "True", 1, 0),
-    number_upvotes_at_retrieval    = as.numeric(number_of_upvotes_of_request_at_retrieval),
-    number_downvotes_at_retrieval  = as.numeric(number_of_downvotes_of_request_at_retrieval),
-    account_age_request            = as.numeric(requester_account_age_in_days_at_request),
-    account_age_retrieval          = as.numeric(requester_account_age_in_days_at_retrieval)
+    used_please = "Used 'Please'",
+    outcome = ifelse(requester_received_pizza == "True", "Received Pizza", "Did Not Receive Pizza")
   )
 
-recieved_did_use_please_pizza <- sum(did_use_please_pizza$received_pizza)
-notrecieved_did_use_please_pizza <- length(did_use_please_pizza$received_pizza) - recieved_did_use_please_pizza
+did_not_use_please_pizza <- read.csv("data/no_please_pizza.csv") %>%
+  mutate(
+    used_please = "Did Not Use 'Please'",
+    outcome = ifelse(requester_received_pizza == "True", "Received Pizza", "Did Not Receive Pizza")
+  )
 
-recieved_did_not_use_please_pizza <- sum(did_not_use_please_pizza$received_pizza)
-notrecieved_did_not_use_please_pizza <- length(did_not_use_please_pizza$received_pizza) - recieved_did_not_use_please_pizza
+# Combine datasets
+combined_pizza <- bind_rows(did_use_please_pizza, did_not_use_please_pizza)
 
-please_pizza_summary <- data.frame(
-  received = c(recieved_did_use_please_pizza, recieved_did_not_use_please_pizza),
-  not_received = c(notrecieved_did_use_please_pizza, notrecieved_did_not_use_please_pizza)
-)
-print(please_pizza_summary)
+# Count outcomes by group
+please_pizza_summary <- combined_pizza %>%
+  count(used_please, outcome)
 
+# Set custom color palette
+outcome_colors <- c("Received Pizza" = "#4CAF50",   # Green
+                    "Did Not Receive Pizza" = "#F44336")  # Red
 
+# Plot
+please_pizza_summary %>%
+  ggplot(aes(x = used_please, y = n, fill = outcome)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = outcome_colors) +
+  labs(
+    title = "Pizza Request Outcomes by 'Please' Usage",
+    x     = "'Please' Usage",
+    y     = "Number of Requests"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
+ggsave("pizza_requests_please_usage.jpeg", width = 8, height = 4)
 
+please_pizza_summary %>%
+  ggplot() +
+  geom_mosaic(aes(weight = n, x = product(used_please), fill = outcome)) +
+  scale_fill_manual(values = outcome_colors) +
+  labs(
+    title = "Pizza Request Outcomes by 'Please' Usage",
+    x     = "'Please' Usage",
+    y     = "Proportion of Requests"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
 
+ggsave("pizza_requests_please_usage_mosaic.jpeg", width = 8, height = 4)
