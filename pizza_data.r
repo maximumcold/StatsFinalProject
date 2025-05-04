@@ -55,6 +55,34 @@ pizza_data %>%
     theme_minimal()
 ggsave("pizza_requests_success_rate.jpeg", width = 8, height = 4)
 
+pizza_data <- pizza_data %>%
+  mutate(
+    request_time       = as.POSIXct(unix_timestamp_of_request_utc,
+                                    origin = "1970-01-01", tz = "America/Chicago"),
+    received_pizza     = ifelse(requester_received_pizza == "True", 1, 0),
+    month_name         = month(request_time, label = TRUE, abbr = TRUE)
+  )
+
+pizza_data %>%
+  group_by(month_name) %>%
+  summarise(
+    n_requests = n(),
+    success_rate = mean(received_pizza)
+  ) %>%
+  ggplot(aes(x = month_name, y = success_rate, color = success_rate)) +
+  geom_point(aes(size = n_requests), alpha = 0.6) +
+  scale_color_gradient(low = "#C23B23", high = "#976ED7") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_size_continuous(name = "Number of Requests") +
+  labs(
+    title = "Success Rate of Pizza Requests by Month",
+    x     = "Month",
+    y     = "Percent Received"
+  ) +
+  theme_minimal()
+
+ggsave("pizza_requests_success_rate_by_month.jpeg", width = 8, height = 4)
+
 pizza_data %>%
   mutate(
     hour = (hour(request_time) + 1) %% 24,  # Shift hours to start at 05:00
@@ -262,5 +290,5 @@ pizza_data <- data.frame(
 table_pizza <- xtabs(n ~ used_please + outcome, data = pizza_data)
 
 print(table_pizza)
-
+pchisq(table_pizza, df = 1, lower.tail = FALSE)
 chisq.test(table_pizza)
